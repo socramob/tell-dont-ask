@@ -3,8 +3,8 @@ import java.util.List;
 
 public class Zelle {
 
-	boolean zelleLebt = true;
-	Koordinaten koordinaten;
+	boolean lebtZelleInNaechsterGeneration = true;
+	final Koordinaten koordinaten;
 	
 
 	public Zelle(Koordinaten koordinaten) {
@@ -12,23 +12,23 @@ public class Zelle {
 	}
 
 	public void stirb() {
-		zelleLebt = false;
+		lebtZelleInNaechsterGeneration = false;
 	}
 	
 	public void temp(List<Zelle> population) {
-		if (zelleLebt) {
+		if (lebtZelleInNaechsterGeneration) {
 			population.add(this);
 		}
 	}
 
-	boolean istNachbarVon(Zelle zelle) {
+	private boolean istNachbarVon(Zelle zelle) {
 		int deltaX = Math.abs(zelle.koordinaten.x - koordinaten.x);
 		int deltaY = Math.abs(zelle.koordinaten.y - koordinaten.y);
 		return (deltaX <= 1 && deltaY <= 1) && !(deltaX == 0 && deltaY == 0);
 	}
 
-	boolean hatWenigerAlsZweiLebendeNachbarn(List<Zelle> population) {
-		int anzahlLebenderNachbarn = 0;
+	private int anzahlLebenderNachbarn(List<Zelle> population) {
+    int anzahlLebenderNachbarn = 0;
 		for (Zelle zelle : population) {
 			if (zelle != this) {
 				if(istNachbarVon(zelle) ) {
@@ -36,14 +36,23 @@ public class Zelle {
 				}
 			}
 		}
-		boolean hatWenigerAlsZweiLebendeNachbarn = anzahlLebenderNachbarn < 2;
-		return hatWenigerAlsZweiLebendeNachbarn;
-	}
+    return anzahlLebenderNachbarn;
+  }
 
 	void ifHatWenigerAlsZweiLebendeNachbarn(List<Zelle> population, Closure closure) {
-		if (hatWenigerAlsZweiLebendeNachbarn(
-				population)) {
+		if (anzahlLebenderNachbarn(population) < 2) {
 			closure.execute();
 		}
 	}
+
+  public void ifHatMehrAlsDreiLebendeNachbarn(List<Zelle> population,
+      Closure closure) {
+    if (anzahlLebenderNachbarn(population) > 3) {
+      closure.execute();
+    }
+  }
+
+  public void at(int x, int y, Closure closure) {
+    koordinaten.at(x, y, closure);
+  }
 }

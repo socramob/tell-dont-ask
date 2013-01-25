@@ -9,4 +9,10 @@ public class Koordinaten {
 		this.y = y;
 	}
 
+  public void at(int x, int y, Closure closure) {
+    if (x == this.x && y == this.y) {
+      closure.execute();
+    }
+  }
+
 }

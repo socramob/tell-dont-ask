@@ -8,71 +8,116 @@ import org.junit.Test;
 
 public class TellDontAskTest {
 
-	@Test
-	public void eine_lebende_Zelle_mit_weniger_als_zwei_Nachbarn_stirbt() {
-		Welt welt = new Welt();
-		
-        SpyZelle spyCell = new SpyZelle(new Koordinaten(0, 0));
-        welt.addZelle(spyCell);
+  @Test
+  public void eine_lebende_Zelle_mit_weniger_als_zwei_Nachbarn_stirbt() {
+    Welt welt = new Welt();
 
-        welt.tick();
+    SpyZelle speisell = new SpyZelle(new Koordinaten(0, 0));
+    welt.addZelle(speisell);
 
-        spyCell.assertDied();
-	}
-	
-	
-	@Test
-	public void eine_lebende_Zelle_mit_zwei_Nachbarn_lebt_weiter() {
-	
-		Welt welt = new Welt();
-		
-        SpyZelle spyCell1 = new SpyZelle(new Koordinaten(0, 0));
-        SpyZelle spyCell2 = new SpyZelle(new Koordinaten(0, 1));
-        SpyZelle spyCell3 = new SpyZelle(new Koordinaten(1, 0));
-        
-        welt.addZelle(spyCell1);
-        welt.addZelle(spyCell2);
-        welt.addZelle(spyCell3);
+    welt.tick();
 
-        welt.tick();
+    speisell.assertDied();
+  }
 
-        spyCell1.assertStayedAlive();
-	}
-	
-//	@Test
-//	public void sollte_zwei_Nachbarn_zaehlen() {
-//		Zelle zelle = new Zelle(new Koordinaten(0, 0));
-//		
-//		List<Zelle> alleZellen = new ArrayList<Zelle>();
-//		alleZellen.add(new Zelle(new Koordinaten(0, 1)));
-//		alleZellen.add(new Zelle(new Koordinaten(1, 0)));
-//
-//		assertEquals(2, Welt.anzahlLebendeNachbarn(zelle, alleZellen));
-//	}
-//	
-//	@Test
-//	public void sollte_keine_Nachbarn_zaehlen() {
-//		Zelle zelle = new Zelle(new Koordinaten(0, 0));
-//		
-//		List<Zelle> alleZellen = new ArrayList<Zelle>();
-//
-//		assertEquals(0, Welt.anzahlLebendeNachbarn(zelle, alleZellen));
-//	}
-	
-	static class SpyZelle extends Zelle {
+  @Test
+  public void eine_lebende_Zelle_mit_zwei_Nachbarn_lebt_weiter() {
 
-		public SpyZelle(Koordinaten koordinaten) {
-			super (koordinaten);
-		}
+    Welt welt = new Welt();
 
-		public void assertStayedAlive() {
-			assertTrue("Zelle sollte am Leben geblieben sein", zelleLebt);
-		}
+    SpyZelle spyCell1 = new SpyZelle(new Koordinaten(0, 0));
+    SpyZelle spyCell2 = new SpyZelle(new Koordinaten(0, 1));
+    SpyZelle spyCell3 = new SpyZelle(new Koordinaten(1, 0));
 
-		public void assertDied() {
-			assertFalse("Zelle sollte tot sein!", zelleLebt);
-		}
-		
-	}
+    welt.addZelle(spyCell1);
+    welt.addZelle(spyCell2);
+    welt.addZelle(spyCell3);
+
+    welt.tick();
+
+    spyCell1.assertStayedAlive();
+  }
+
+  @Test public void
+  eine_lebende_Zelle_mit_mehr_als_drei_Nachbarn_stirbt() {
+
+    Welt welt = new Welt();
+
+    SpyZelle lebendeZelle = new SpyZelle(new Koordinaten(0, 0));
+
+    Zelle cell1 = new Zelle(new Koordinaten(0, -1));
+    Zelle cell2 = new Zelle(new Koordinaten(0, 1));
+    Zelle cell3 = new Zelle(new Koordinaten(1, 0));
+    Zelle cell4 = new Zelle(new Koordinaten(1, 1));
+
+    welt.addZelle(lebendeZelle);
+    welt.addZelle(cell1);
+    welt.addZelle(cell2);
+    welt.addZelle(cell3);
+    welt.addZelle(cell4);
+
+    welt.tick();
+
+    lebendeZelle.assertDied();
+  }
+
+  @Test public void
+  eine_tote_Zelle_mit_genau_drei_lebenden_Nachbarn_wird_zum_Leben_erweckt() {
+
+    Welt welt = new Welt();
+
+    Zelle cell1 = new Zelle(new Koordinaten(0, -1));
+    Zelle cell2 = new Zelle(new Koordinaten(0, 0));
+    Zelle cell3 = new Zelle(new Koordinaten(0, 1));
+
+    welt.addZelle(cell1);
+    welt.addZelle(cell2);
+    welt.addZelle(cell3);
+
+    welt.tick();
+
+    welt.ifTotAt(1, 0, new Closure() {
+      @Override
+      public void execute() {
+        fail("Zelle sollte leben");
+      }
+    });
+  }
+
+  // @Test
+  // public void sollte_zwei_Nachbarn_zaehlen() {
+  // Zelle zelle = new Zelle(new Koordinaten(0, 0));
+  //
+  // List<Zelle> alleZellen = new ArrayList<Zelle>();
+  // alleZellen.add(new Zelle(new Koordinaten(0, 1)));
+  // alleZellen.add(new Zelle(new Koordinaten(1, 0)));
+  //
+  // assertEquals(2, Welt.anzahlLebendeNachbarn(zelle, alleZellen));
+  // }
+  //
+  // @Test
+  // public void sollte_keine_Nachbarn_zaehlen() {
+  // Zelle zelle = new Zelle(new Koordinaten(0, 0));
+  //
+  // List<Zelle> alleZellen = new ArrayList<Zelle>();
+  //
+  // assertEquals(0, Welt.anzahlLebendeNachbarn(zelle, alleZellen));
+  // }
+
+  static class SpyZelle extends Zelle {
+
+    public SpyZelle(Koordinaten koordinaten) {
+      super(koordinaten);
+    }
+
+    public void assertStayedAlive() {
+      assertTrue("Zelle sollte am Leben geblieben sein", lebtZelleInNaechsterGeneration);
+    }
+
+    public void assertDied() {
+      assertFalse("Zelle sollte tot sein!", lebtZelleInNaechsterGeneration);
+    }
+
+  }
 
 }
