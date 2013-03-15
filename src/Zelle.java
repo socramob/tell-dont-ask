@@ -4,10 +4,10 @@ import java.util.List;
 public class Zelle {
 
 	boolean lebtZelleInNaechsterGeneration = true;
-	final Koordinaten koordinaten;
+	final Position koordinaten;
 	
 
-	public Zelle(Koordinaten koordinaten) {
+	public Zelle(Position koordinaten) {
 		this.koordinaten = koordinaten;
 	}
 
@@ -52,7 +52,23 @@ public class Zelle {
     }
   }
 
-  public void at(int x, int y, Closure closure) {
+  public void locatedAt(int x, int y, Closure closure) {
     koordinaten.at(x, y, closure);
+  }
+
+  public void NachbarKoordinaten(Closure each) {
+    this.koordinaten.NachbarKoordinaten(each);
+  }
+
+  public void ifHatDreiLebendeNachbarn(List<Zelle> aktuelleLebendePopulation,
+      Closure closure) {
+    if(anzahlLebenderNachbarn(aktuelleLebendePopulation) == 3) {
+      closure.execute();
+    }
+  }
+  
+  @Override
+  public String toString() {
+    return "@("+koordinaten.x+""+koordinaten.y+")";
   }
 }

@@ -1,4 +1,4 @@
 
 public interface Closure {
-	public void execute();
+	public void execute(Object... args);
 }
