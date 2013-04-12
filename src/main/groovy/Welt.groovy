@@ -52,26 +52,13 @@ class Welt {
   }
 
   void ifTotAt(int x, int y, Closure closure) {
-    final BooleanHolder lebendeZelleAtXY = new BooleanHolder()
-    for (final Zelle zelle : aktuelleLebendePopulation) {
-      zelle.locatedAt(x, y, { Object... arguments ->
-          lebendeZelleAtXY.setTrue()
-      })
-    }
-    lebendeZelleAtXY.ifFalse(closure)
-  }
-
-  static class BooleanHolder {
-    boolean value = false
-
-    void setTrue() {
-      value = true
-    }
-
-    void ifFalse(Closure closure) {
-      if (value == false)
-        closure.call()
-    }
+    boolean lebendeZelleAtXY = false
+	aktuelleLebendePopulation.each {
+		it.locatedAt(x, y) {
+			lebendeZelleAtXY = true
+		}
+	}
+	if(!lebendeZelleAtXY) closure.call()
   }
 
 }
