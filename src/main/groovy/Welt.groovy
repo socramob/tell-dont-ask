@@ -51,14 +51,11 @@ class Welt {
     aktuelleLebendePopulation.add(zelle)
   }
 
-  void ifTotAt(int x, int y, Closure closure) {
-    boolean lebendeZelleAtXY = false
-	aktuelleLebendePopulation.each {
-		it.locatedAt(x, y) {
-			lebendeZelleAtXY = true
-		}
-	}
-	if(!lebendeZelleAtXY) closure.call()
+  void ifTotAt(int xKoord, int yKoord, Closure closure) {
+    def position = new Position(xKoord, yKoord)
+      if(aktuelleLebendePopulation.every { position != it.koordinaten }) {
+        closure.call()
+      }
   }
 
 }

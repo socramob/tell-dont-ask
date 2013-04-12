@@ -81,6 +81,32 @@ class TellDontAskTest {
   }
   
   @Test
+  void eine_tote_Zelle_sollte_tot_sein() {\
+	  Welt welt = new Welt()
+	  boolean called = false
+	  welt.ifTotAt(0, 0) {
+		  called = true
+	  }
+	  assertTrue(called)
+  }
+
+  @Test
+  void eine_tote_Zelle_neben_einer_lebendigen_Zelle_sollte_tot_sein() {
+	  Welt welt = new Welt()
+	  welt.addZelle(new Zelle(new Position(0, 0)))
+
+	  welt.ifTotAt(0, 0) {
+		  fail("Sollte lebendig sein")
+	  }
+
+	  boolean called = false
+	  welt.ifTotAt(0, 1) {
+		  called = true
+	  }
+	  assertTrue(called)
+  }
+
+  @Test
   void eine_zelle_sollte_acht_nachbarn_haben() {
     Zelle cell = new Zelle(new Position(0, 0))
     int count = 0
@@ -88,6 +114,30 @@ class TellDontAskTest {
         count++
     }
     assertEquals(8, count)
+  }
+
+  @Test
+  public void itShouldSupportWith() {
+	  withVar("hallo") {
+		  assertEquals("hallo", it)
+	  }
+  }
+
+  @Test
+  public void itShouldSupportLambdaWith() {
+	  def block = { str ->
+		  sleep(5000)
+		  "hallo, $str"
+	  }.memoize()
+
+	  assertEquals "hallo, world", block.call("world").toString()
+	  println "One"
+	  assertEquals "hallo, world", block.call("world").toString()
+	  println "Two"
+  }
+
+  def withVar(variable, Closure block) {
+	  block.call(variable)
   }
 
   // @Test
