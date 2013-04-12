@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Welt {
 
   List<Zelle> aktuelleLebendePopulation = new ArrayList<Zelle>();
@@ -14,45 +11,26 @@ public class Welt {
     for (final Zelle zelle : aktuelleLebendePopulation) {
 
       zelle.ifHatWenigerAlsZweiLebendeNachbarn(aktuelleLebendePopulation,
-          new Closure() {
-            @Override
-            public void execute(Object... args) {
+          { Object... arguments ->
               // Regel 1 > stirbt
               zelle.stirb();
-            }
           });
       zelle.ifHatMehrAlsDreiLebendeNachbarn(aktuelleLebendePopulation,
-          new Closure() {
-            @Override
-            public void execute(Object... args) {
+          { Object... arguments ->
               zelle.stirb();
-            }
           });
       zelle.temp(naechsteGeneration);
 
-      zelle.NachbarKoordinaten(new Closure() {
-
-        @Override
-        public void execute(Object... args) {
+      zelle.NachbarKoordinaten({ Object... arguments1 ->
           // 8-)
-          final Position position = (Position) args[0];
-          ifTotAt(position, new Closure() {
-
-            @Override
-            public void execute(Object... args) {
+          final Position position = (Position) arguments1[0];
+          ifTotAt(position, { Object... arguments2 ->
               // Zelle an koordinaten ist TOT
               final Zelle heisenCell = new Zelle(position);
-              heisenCell.ifHatDreiLebendeNachbarn(aktuelleLebendePopulation, new Closure() {
-                
-                @Override
-                public void execute(Object... args) {
+              heisenCell.ifHatDreiLebendeNachbarn(aktuelleLebendePopulation, { Object... arguments3 ->
                  heisenCell.temp(naechsteGeneration);
-                }
               });
-
-            }
           });
-        }
       });
       // für jeden Nachbar,
       // wenn dieser tot ist,
@@ -76,11 +54,8 @@ public class Welt {
   public void ifTotAt(int x, int y, Closure closure) {
     final BooleanHolder lebendeZelleAtXY = new BooleanHolder();
     for (final Zelle zelle : aktuelleLebendePopulation) {
-      zelle.locatedAt(x, y, new Closure() {
-        @Override
-        public void execute(Object... args) {
+      zelle.locatedAt(x, y, { Object... arguments ->
           lebendeZelleAtXY.setTrue();
-        }
       });
     }
     lebendeZelleAtXY.ifFalse(closure);

@@ -36,8 +36,8 @@ public class TellDontAskTest {
     spyCell1.assertStayedAlive();
   }
   
-  @Test public void
-  eine_lebende_Zelle_mit_mehr_als_drei_Nachbarn_stirbt() {
+  @Test
+  public void eine_lebende_Zelle_mit_mehr_als_drei_Nachbarn_stirbt() {
     
     Welt welt = new Welt();
     
@@ -60,8 +60,8 @@ public class TellDontAskTest {
   }
   
   //@Ignore("Zu großer Schritt. Need subcycles!!!11elf")
-  @Test public void
-  eine_tote_Zelle_mit_genau_drei_lebenden_Nachbarn_wird_zum_Leben_erweckt() {
+  @Test
+  public void eine_tote_Zelle_mit_genau_drei_lebenden_Nachbarn_wird_zum_Leben_erweckt() {
      
     Welt welt = new Welt();
     
@@ -83,16 +83,13 @@ public class TellDontAskTest {
     });
   }
   
-  @Test public void 
-  eine_zelle_sollte_acht_nachbarn_haben() {
+  @Test
+  public void eine_zelle_sollte_acht_nachbarn_haben() {
     Zelle cell = new Zelle(new Position(0, 0));
     final AtomicInteger count = new AtomicInteger();
-    cell.NachbarKoordinaten(new Closure(){
-      @Override
-      public void execute(Object... args) {
+    cell.NachbarKoordinaten({ Object... args ->
         Position koordinaten = (Position)args[0];
         count.incrementAndGet();
-      }
     });
     assertEquals(8, count.intValue());
   }
