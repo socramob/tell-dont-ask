@@ -70,7 +70,7 @@ public class Welt {
 
     public void ifFalse(Closure closure) {
       if (value == false)
-        closure.execute();
+        closure.call();
     }
   }
 

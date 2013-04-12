@@ -75,11 +75,8 @@ public class TellDontAskTest {
     
     welt.tick();
     
-    welt.ifTotAt(1, 0, new Closure() {
-      @Override
-      public void execute(Object... args) {
+    welt.ifTotAt(1, 0, { Object... args ->
         fail("Zelle sollte leben");
-      }
     });
   }
   

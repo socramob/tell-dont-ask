@@ -11,19 +11,19 @@ public class Position {
 
   public void at(int x, int y, Closure closure) {
     if (x == this.x && y == this.y) {
-      closure.execute();
+      closure.call();
     }
   }
 
   public void NachbarKoordinaten(Closure each) {
-    each.execute(new Position(this.x-1, this.y-1));
-    each.execute(new Position(this.x-1, this.y));
-    each.execute(new Position(this.x-1, this.y+1));
-    each.execute(new Position(this.x, this.y+1));
-    each.execute(new Position(this.x+1, this.y+1));
-    each.execute(new Position(this.x+1, this.y));
-    each.execute(new Position(this.x+1, this.y-1));
-    each.execute(new Position(this.x, this.y-1));
+    each.call(new Position(this.x-1, this.y-1));
+    each.call(new Position(this.x-1, this.y));
+    each.call(new Position(this.x-1, this.y+1));
+    each.call(new Position(this.x, this.y+1));
+    each.call(new Position(this.x+1, this.y+1));
+    each.call(new Position(this.x+1, this.y));
+    each.call(new Position(this.x+1, this.y-1));
+    each.call(new Position(this.x, this.y-1));
   }
 
 }

@@ -38,14 +38,14 @@ public class Zelle {
 
 	void ifHatWenigerAlsZweiLebendeNachbarn(List<Zelle> population, Closure closure) {
 		if (anzahlLebenderNachbarn(population) < 2) {
-			closure.execute();
+			closure.call();
 		}
 	}
 
   public void ifHatMehrAlsDreiLebendeNachbarn(List<Zelle> population,
       Closure closure) {
     if (anzahlLebenderNachbarn(population) > 3) {
-      closure.execute();
+      closure.call();
     }
   }
 
@@ -60,7 +60,7 @@ public class Zelle {
   public void ifHatDreiLebendeNachbarn(List<Zelle> aktuelleLebendePopulation,
       Closure closure) {
     if(anzahlLebenderNachbarn(aktuelleLebendePopulation) == 3) {
-      closure.execute();
+      closure.call();
     }
   }
   
